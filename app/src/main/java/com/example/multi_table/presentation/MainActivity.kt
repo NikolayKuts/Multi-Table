@@ -1,4 +1,4 @@
-package com.example.multi_table
+package com.example.multi_table.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.example.multi_table.ui.theme.MultiTableTheme
+import com.example.multi_table.presentation.theme.MultiTableTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.multi_table.ui.theme
+package com.example.multi_table.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
