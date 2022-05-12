@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Multi-Table</string>
+    <string name="button_text_start">Start</string>
+    <string name="button_text_show">Show</string>
+    <string name="button_text_wrong">Wrong</string>
+    <string name="button_text_next">Next</string>
 </resources>
