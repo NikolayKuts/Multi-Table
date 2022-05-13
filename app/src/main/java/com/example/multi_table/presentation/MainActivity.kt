@@ -5,15 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -24,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.multi_table.R
 import com.example.multi_table.domain.MultiplicationExpression
 import com.example.multi_table.domain.Timer
-import com.example.multi_table.presentation.theme.MultiTableTheme
+import com.example.multi_table.presentation.theme.MainTheme
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -40,17 +38,22 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 setContent {
-                    MultiTableTheme {
-                        when (state) {
-                            is MainState.StartState -> {
-                                StartContent()
-                            }
-                            is MainState.QuestionedState -> {
-                                QuestionView(expression = state.expression, time = state.time)
-                            }
-                            is MainState.ResultState -> {
-                                if (state.expression != null) {
-                                    ResultView(expression = state.expression, time = state.time)
+//                    MainTheme(type = ThemeType.Custom) {
+                    MainTheme {
+                        window.statusBarColor = MainTheme.colors.materialColors.primary.toArgb()
+
+                        Surface() {
+                            when (state) {
+                                is MainState.StartState -> {
+                                    BeginningView()
+                                }
+                                is MainState.QuestionedState -> {
+                                    QuestionView(expression = state.expression, time = state.time)
+                                }
+                                is MainState.ResultState -> {
+                                    if (state.expression != null) {
+                                        ResultView(expression = state.expression, time = state.time)
+                                    }
                                 }
                             }
                         }
@@ -58,34 +61,22 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-////                Surface(
-////                    modifier = Modifier.fillMaxSize(),
-////                    color = MaterialTheme.colors.background
-////                )
     }
 
     @Composable
-    private fun StartContent() {
-        setContent {
-            MultiTableTheme {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
-                        shape = AbsoluteRoundedCornerShape(size = 16.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8BC34A)),
-                        onClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
-                    ) {
-                        Text(text = stringResource(R.string.button_text_start))
-                    }
-                }
+    private fun BeginningView() {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
+//                ),
+                onClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
+            ) {
+                Text(text = stringResource(R.string.button_text_start))
             }
         }
     }
@@ -109,11 +100,9 @@ class MainActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .align(alignment = Alignment.BottomCenter)
                     .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
-                shape = AbsoluteRoundedCornerShape(size = 16.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8BC34A)),
                 onClick = { viewModel.sendEvent(event = MainEvent.ExpressionResult) }
             ) {
-                Text(text = stringResource(R.string.button_text_show))
+                Text(text = stringResource(R.string.button_text_result))
             }
         }
     }
@@ -123,14 +112,12 @@ class MainActivity : ComponentActivity() {
         val timeState = time.collectAsState()
 
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
         ) {
             TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
 
             Row(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .background(color = Color.White),
+                modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ExpressionResultElements(expression = expression)
@@ -140,11 +127,14 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(alignment = Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
+                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
             ) {
                 ResultViewButton(text = stringResource(R.string.button_text_wrong)) {
                     viewModel.sendEvent(event = MainEvent.WrongAnswer)
                 }
+
+                Spacer(modifier = Modifier.size(size = 16.dp))
+
                 ResultViewButton(text = stringResource(R.string.button_text_next)) {
                     viewModel.sendEvent(event = MainEvent.NextExpression)
                 }
@@ -157,21 +147,15 @@ class MainActivity : ComponentActivity() {
         ExpressionElements(expression = expression)
 
         Text(
-            text = "=",
+            text = stringResource(R.string.text_equal_sign),
             modifier = Modifier.padding(start = 8.dp),
-            color = Color(0x70217A7A),
-            fontSize = 40.sp,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold
+            style = MainTheme.typographies.expressionResultTextStyle
         )
 
         Text(
             text = expression.product.toString(),
             modifier = Modifier.padding(start = 8.dp),
-            color = Color(0x70217A7A),
-            fontSize = 40.sp,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold
+            style = MainTheme.typographies.expressionResultTextStyle
         )
     }
 
@@ -187,12 +171,9 @@ class MainActivity : ComponentActivity() {
             ExpressionElement(text = expression.multiplicand.toString())
 
             Text(
-                text = "x",
+                text = stringResource(R.string.text_multiplication_sign),
                 modifier = Modifier.padding(8.dp),
-                color = Color(0xFFDFB538),
-                fontSize = 28.sp,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.Bold
+                style = MainTheme.typographies.multiplicationSignTextStyle
             )
 
             ExpressionElement(text = expression.multiplier.toString())
@@ -204,43 +185,14 @@ class MainActivity : ComponentActivity() {
         Text(
             text = text,
             modifier = Modifier.padding(8.dp),
-            fontSize = 40.sp,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF217A7A),
+            style = MainTheme.typographies.expressionTextStyle
         )
     }
-
-//    @Preview
-//    @Composable
-//    fun Preview() {
-//        MultiTableTheme {
-//            Surface(
-//                modifier = Modifier.fillMaxSize(),
-//                color = MaterialTheme.colors.background
-//            ) {
-//                QuestionView(
-//                    expression = MultiplicationExpression(
-//                        multiplicand = 8,
-//                        multiplier = 7
-//                    ),
-//                    time = MutableStateFlow(Timer.Time(seconds = 23, millis = 10))
-//                )
-//            }
-//
-//        }
-//    }
 
     @Composable
     private fun ResultViewButton(text: String, onClick: () -> Unit) {
         Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp),
-            shape = AbsoluteRoundedCornerShape(size = 16.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(color = 0xFF8BC34A)
-            ),
+            modifier = Modifier.fillMaxWidth(),
             onClick = onClick,
             elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
@@ -257,24 +209,18 @@ class MainActivity : ComponentActivity() {
         ) {
             Text(
                 text = seconds.toString(),
-                fontStyle = FontStyle.Italic,
-                fontSize = 28.sp,
-                color = Color(0xFF768D76)
+                style = MainTheme.typographies.timerTextStyle
             )
             Text(
-                text = ":",
+                text = stringResource(R.string.text_colon),
                 modifier = Modifier
                     .padding(start = 4.dp, end = 4.dp)
                     .offset(y = (-2.5).dp),
-                fontStyle = FontStyle.Italic,
-                fontSize = 28.sp,
-                color = Color(0xFF768D76)
+                style = MainTheme.typographies.timerTextStyle
             )
             Text(
                 text = millis.toString(),
-                fontStyle = FontStyle.Italic,
-                fontSize = 28.sp,
-                color = Color(0xFF768D76)
+                style = MainTheme.typographies.timerTextStyle
             )
         }
     }

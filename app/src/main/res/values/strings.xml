@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Multi-Table</string>
     <string name="button_text_start">Start</string>
-    <string name="button_text_show">Show</string>
+    <string name="button_text_result">Result</string>
     <string name="button_text_wrong">Wrong</string>
     <string name="button_text_next">Next</string>
+    <string name="text_colon">:</string>
+    <string name="text_multiplication_sign">x</string>
+    <string name="text_equal_sign">=</string>
 </resources>
