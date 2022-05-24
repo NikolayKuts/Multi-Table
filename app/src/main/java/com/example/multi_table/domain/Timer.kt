@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class Timer(private val coroutineScope: CoroutineScope) {
+class Timer {
 
     private var isRunning = false
     private var runningJob: Job? = null
@@ -14,17 +14,13 @@ class Timer(private val coroutineScope: CoroutineScope) {
     private val _time = MutableStateFlow(value = 0)
     val time = _time.asStateFlow()
 
-    val parsedTime = _time.map { parseTime(millis = it) }.stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.Lazily,
-        initialValue = parseTime(millis = _time.value)
-    )
+    private val parsedTime = _time.map { parseTime(millis = it) }
+    fun run(scope: CoroutineScope) {
+        cancelRunning()
 
-    fun run() {
-        isRunning = true
-        _time.value = 0
+        runningJob = scope.launch {
+            isRunning = true
 
-        runningJob = coroutineScope.launch {
             while (isRunning) {
                 delay(100)
                 _time.value += 100
@@ -32,13 +28,25 @@ class Timer(private val coroutineScope: CoroutineScope) {
         }
     }
 
-    fun pause() {
+    fun getParsedTimeAsStateFlow(scope: CoroutineScope) = parsedTime.stateIn(
+        scope = scope,
+        started = SharingStarted.Eagerly,
+        initialValue = parseTime(millis = _time.value)
+    )
+
+    fun stop() {
         isRunning = false
         runningJob?.cancel()
     }
 
     private fun parseTime(millis: Int): Time {
         return Time(seconds = millis / 1000, millis = (millis % 1000) / 100)
+    }
+
+    private fun cancelRunning() {
+        runningJob?.cancel()
+        isRunning = false
+        _time.value = 0
     }
 
     class Time(

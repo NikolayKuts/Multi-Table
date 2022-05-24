@@ -3,21 +3,19 @@ package com.example.multi_table.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.example.multi_table.R
 import com.example.multi_table.domain.MultiplicationExpression
@@ -38,7 +36,6 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 setContent {
-//                    MainTheme(type = ThemeType.Custom) {
                     MainTheme {
                         window.statusBarColor = MainTheme.colors.materialColors.primary.toArgb()
 
@@ -73,7 +70,6 @@ class MainActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
-//                ),
                 onClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
             ) {
                 Text(text = stringResource(R.string.button_text_start))
