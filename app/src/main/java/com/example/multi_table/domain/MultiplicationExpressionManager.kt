@@ -5,18 +5,23 @@ import java.util.*
 
 class MultiplicationExpressionManager {
 
+    companion object {
+
+        private val DIGIT_RANGE: IntRange = 2..9
+    }
+
     private val noneQueue: Queue<MultiplicationExpression>
     private val soonQueue: Queue<MultiplicationExpression> = LinkedList()
     private val hurryQueue: Queue<MultiplicationExpression> = LinkedList()
     private val immediatelyQueue: Queue<MultiplicationExpression> = LinkedList()
 
     var currentExpression: MultiplicationExpression? = null
-    private set
+        private set
 
     init {
         val expressions = mutableListOf<MultiplicationExpression>()
-        (2..9).onEach { multiplicand: Int ->
-            (2..9).onEach { multiplier: Int ->
+        (DIGIT_RANGE).onEach { multiplicand: Int ->
+            (DIGIT_RANGE).onEach { multiplier: Int ->
                 expressions.add(
                     MultiplicationExpression(multiplicand = multiplicand, multiplier = multiplier)
                 )
@@ -27,7 +32,7 @@ class MultiplicationExpressionManager {
     }
 
     fun nextExpression(
-        answerTime: Int
+        answerTime: Long
     ): MultiplicationExpression {
         val nextExpression = when {
             immediatelyQueue.isNotEmpty() -> immediatelyQueue.remove()
@@ -50,13 +55,15 @@ class MultiplicationExpressionManager {
             else -> noneQueue.remove()
         }
 
-        currentExpression?.let { orderExpression(expression = it, answerTime = IMMEDIATELY.timeout + 1) }
+        currentExpression?.let {
+            orderExpression(expression = it, answerTime = IMMEDIATELY.timeout)
+        }
         currentExpression = nextExpression
 
         return nextExpression
     }
 
-    private fun orderExpression(expression: MultiplicationExpression, answerTime: Int) {
+    private fun orderExpression(expression: MultiplicationExpression, answerTime: Long) {
         when {
             answerTime >= IMMEDIATELY.timeout -> immediatelyQueue.add(expression)
             answerTime >= HURRY.timeout -> hurryQueue.add(expression)
@@ -67,9 +74,9 @@ class MultiplicationExpressionManager {
     }
 }
 
-enum class MemorizationLevel(val timeout: Int) {
-    NONE(timeout = 1000),
-    SOON(timeout = 1500),
-    HURRY(timeout = 2000),
-    IMMEDIATELY(timeout = 2500)
+enum class MemorizationLevel(val timeout: Long) {
+    NONE(timeout = 1000L),
+    SOON(timeout = 2000L),
+    HURRY(timeout = 2500L),
+    IMMEDIATELY(timeout = 3000L)
 }

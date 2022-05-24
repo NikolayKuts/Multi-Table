@@ -69,7 +69,8 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
+                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+                elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
                 onClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
             ) {
                 Text(text = stringResource(R.string.button_text_start))
@@ -95,7 +96,8 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(alignment = Alignment.BottomCenter)
-                    .padding(start = 24.dp, end = 28.dp, bottom = 24.dp),
+                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+                elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
                 onClick = { viewModel.sendEvent(event = MainEvent.ExpressionResult) }
             ) {
                 Text(text = stringResource(R.string.button_text_result))
