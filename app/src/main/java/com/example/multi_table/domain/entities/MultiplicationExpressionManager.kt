@@ -1,6 +1,7 @@
 package com.example.multi_table.domain
 
 import com.example.multi_table.domain.MemorizationLevel.*
+import com.example.multi_table.domain.entities.MultiplicationExpression
 import java.util.*
 
 class MultiplicationExpressionManager {

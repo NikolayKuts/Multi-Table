@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.multi_table.R
-import com.example.multi_table.domain.MultiplicationExpression
-import com.example.multi_table.domain.Timer
+import com.example.multi_table.domain.entities.MultiplicationExpression
+import com.example.multi_table.domain.entities.Timer
 import com.example.multi_table.presentation.theme.MainTheme
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycle.addObserver(viewModel)
 
         lifecycleScope.launch {
             viewModel.state.collect { state ->

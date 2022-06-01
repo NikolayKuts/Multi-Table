@@ -1,7 +1,7 @@
 package com.example.multi_table.presentation
 
-import com.example.multi_table.domain.MultiplicationExpression
-import com.example.multi_table.domain.Timer
+import com.example.multi_table.domain.entities.MultiplicationExpression
+import com.example.multi_table.domain.entities.Timer
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class MainState {
