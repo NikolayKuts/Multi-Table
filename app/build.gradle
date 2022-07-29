@@ -68,6 +68,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
     testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
+    testImplementation "io.mockk:mockk:1.12.5"
 
     /** debug **/
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"

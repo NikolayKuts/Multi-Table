@@ -20,16 +20,7 @@ class MultiplicationExpressionManager {
         private set
 
     init {
-        val expressions = mutableListOf<MultiplicationExpression>()
-        (DIGIT_RANGE).onEach { multiplicand: Int ->
-            (DIGIT_RANGE).onEach { multiplier: Int ->
-                expressions.add(
-                    MultiplicationExpression(multiplicand = multiplicand, multiplier = multiplier)
-                )
-            }
-        }
-        expressions.shuffle()
-        noneQueue = LinkedList(expressions)
+        noneQueue = getInitializedList()
     }
 
     fun nextExpression(
@@ -62,6 +53,22 @@ class MultiplicationExpressionManager {
         currentExpression = nextExpression
 
         return nextExpression
+    }
+
+    private fun getInitializedList(): LinkedList<MultiplicationExpression> {
+        return LinkedList<MultiplicationExpression>().apply {
+            (DIGIT_RANGE).onEach { multiplicand: Int ->
+                (DIGIT_RANGE).onEach { multiplier: Int ->
+                    add(
+                        MultiplicationExpression(
+                            multiplicand = multiplicand,
+                            multiplier = multiplier
+                        )
+                    )
+                }
+            }
+            shuffle()
+        }
     }
 
     private fun orderExpression(expression: MultiplicationExpression, answerTime: Long) {
