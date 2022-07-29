@@ -1,6 +1,6 @@
-package com.example.multi_table.domain.entities.useCases
+package com.example.multi_table.domain.useCases
 
-import com.example.multi_table.domain.MultiplicationExpressionManager
+import com.example.multi_table.domain.common.MultiplicationExpressionManager
 import com.example.multi_table.domain.entities.MultiplicationExpression
 
 class GetMultiplicationExpressionAfterWrongOneUseCase(

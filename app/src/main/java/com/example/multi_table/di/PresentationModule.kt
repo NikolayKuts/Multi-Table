@@ -1,7 +1,5 @@
 package com.example.multi_table.di
 
-import com.example.multi_table.domain.MultiplicationExpressionManager
-import com.example.multi_table.domain.entities.Timer
 import com.example.multi_table.presentation.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

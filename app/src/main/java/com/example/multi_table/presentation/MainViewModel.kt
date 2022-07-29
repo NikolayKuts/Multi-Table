@@ -4,10 +4,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.multi_table.domain.entities.Timer
-import com.example.multi_table.domain.entities.useCases.GetMultiplicationExpressionAfterWrongOneUseCase
-import com.example.multi_table.domain.entities.useCases.GetMultiplicationExpressionWithResultUseCase
-import com.example.multi_table.domain.entities.useCases.GetMultiplicationExpressionWithoutResultUseCase
+import com.example.multi_table.domain.common.Timer
+import com.example.multi_table.domain.useCases.GetMultiplicationExpressionAfterWrongOneUseCase
+import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithResultUseCase
+import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithoutResultUseCase
 import com.example.multi_table.presentation.MainState.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

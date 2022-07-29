@@ -1,6 +1,6 @@
-package com.example.multi_table.domain
+package com.example.multi_table.domain.common
 
-import com.example.multi_table.domain.MemorizationLevel.*
+import com.example.multi_table.domain.common.MemorizationLevel.*
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import java.util.*
 
@@ -33,7 +33,7 @@ class MultiplicationExpressionManager {
     }
 
     fun nextExpression(
-        answerTime: Long
+        answerTime: Long,
     ): MultiplicationExpression {
         val nextExpression = when {
             immediatelyQueue.isNotEmpty() -> immediatelyQueue.remove()
@@ -70,14 +70,6 @@ class MultiplicationExpressionManager {
             answerTime >= HURRY.timeout -> hurryQueue.add(expression)
             answerTime >= SOON.timeout -> soonQueue.add(expression)
             answerTime >= NONE.timeout -> noneQueue.add(expression)
-
         }
     }
-}
-
-enum class MemorizationLevel(val timeout: Long) {
-    NONE(timeout = 1000L),
-    SOON(timeout = 2000L),
-    HURRY(timeout = 2500L),
-    IMMEDIATELY(timeout = 3000L)
 }
