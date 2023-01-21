@@ -1,8 +1,6 @@
 package com.example.multi_table.presentation
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,7 +13,6 @@ import com.example.multi_table.domain.common.Timer
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
 import kotlinx.coroutines.flow.StateFlow
-
 
 @Composable
 fun ResultView(
@@ -42,19 +39,11 @@ fun ResultView(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(alignment = Alignment.BottomCenter)
-                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                .buttonPadding()
         ) {
-            ResultViewButton(
-                text = stringResource(R.string.button_text_wrong),
-                onClick = onWrongButtonClick
-            )
-
+            AppButton(textId = R.string.button_text_wrong, onClick = onWrongButtonClick)
             Spacer(modifier = Modifier.size(size = 16.dp))
-
-            ResultViewButton(
-                text = stringResource(R.string.button_text_next),
-                onClick = onNextButtonClick
-            )
+            AppButton(textId = R.string.button_text_wrong, onClick = onNextButtonClick)
         }
     }
 }
@@ -74,15 +63,4 @@ private fun ExpressionResultElements(expression: MultiplicationExpression) {
         modifier = Modifier.padding(start = 8.dp),
         style = MainTheme.typographies.expressionResultTextStyle
     )
-}
-
-@Composable
-private fun ResultViewButton(text: String, onClick: () -> Unit) {
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onClick,
-        elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
-    ) {
-        Text(text = text)
-    }
 }
