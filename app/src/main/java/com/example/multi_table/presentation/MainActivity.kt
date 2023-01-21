@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
+import com.example.multi_table.presentation.MainState.*
 import com.example.multi_table.presentation.theme.MainTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,35 +34,23 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ScreenState(state: MainState) {
         when (state) {
-            is MainState.StartState -> {
+            is StartState -> {
                 BeginningView(
-                    onStartButtonClick = {
-                        viewModel.sendEvent(event = MainEvent.NextExpression)
-                    }
+                    onStartButtonClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
                 )
             }
-            is MainState.QuestionedState -> {
+            is QuestionedState -> {
                 QuestionView(
-                    expression = state.expression,
-                    time = state.time,
-                    onResultButtonClick = {
-                        viewModel.sendEvent(event = MainEvent.ExpressionResult)
-                    }
+                    state = state,
+                    onResultButtonClick = { viewModel.sendEvent(event = MainEvent.ExpressionResult) }
                 )
             }
-            is MainState.ResultState -> {
-                if (state.expression != null) {
-                    ResultView(
-                        expression = state.expression,
-                        time = state.time,
-                        onWrongButtonClick = {
-                            viewModel.sendEvent(event = MainEvent.WrongAnswer)
-                        },
-                        onNextButtonClick = {
-                            viewModel.sendEvent(event = MainEvent.NextExpression)
-                        }
-                    )
-                }
+            is ResultState -> {
+                ResultView(
+                    state = state,
+                    onWrongButtonClick = { viewModel.sendEvent(event = MainEvent.WrongAnswer) },
+                    onNextButtonClick = { viewModel.sendEvent(event = MainEvent.NextExpression) }
+                )
             }
         }
 
