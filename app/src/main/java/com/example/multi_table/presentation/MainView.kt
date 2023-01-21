@@ -18,24 +18,6 @@ import com.example.multi_table.presentation.theme.MainTheme
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun BeginningView(onStartButtonClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
-            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
-            onClick = onStartButtonClick
-        ) {
-            Text(text = stringResource(R.string.button_text_start))
-        }
-    }
-}
-
-@Composable
 fun QuestionView(
     expression: MultiplicationExpression,
     time: StateFlow<Timer.Time>,
