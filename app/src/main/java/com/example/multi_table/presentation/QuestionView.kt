@@ -7,17 +7,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.multi_table.R
-import com.example.multi_table.domain.common.Timer
-import com.example.multi_table.domain.entities.MultiplicationExpression
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun QuestionView(
-    expression: MultiplicationExpression,
-    time: StateFlow<Timer.Time>,
+    state: MainState.QuestionedState,
     onResultButtonClick: () -> Unit,
 ) {
-    val timeState = time.collectAsState()
+    val timeState = state.time.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -25,7 +21,7 @@ fun QuestionView(
         TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
 
         ExpressionElements(
-            expression = expression,
+            expression = state.expression,
             modifier = Modifier.align(alignment = Alignment.Center)
         )
 

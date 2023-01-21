@@ -9,41 +9,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
-import com.example.multi_table.domain.common.Timer
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ResultView(
-    expression: MultiplicationExpression,
-    time: StateFlow<Timer.Time>,
+    state: MainState.ResultState,
     onWrongButtonClick: () -> Unit,
     onNextButtonClick: () -> Unit,
 ) {
-    val timeState = time.collectAsState()
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
-
-        Row(
-            modifier = Modifier.align(Alignment.Center),
-            verticalAlignment = Alignment.CenterVertically
+    val timeState = state.time.collectAsState()
+    state.expression?.let { expression ->
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            ExpressionResultElements(expression = expression)
-        }
+            TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(alignment = Alignment.BottomCenter)
-                .buttonPadding()
-        ) {
-            AppButton(textId = R.string.button_text_wrong, onClick = onWrongButtonClick)
-            Spacer(modifier = Modifier.size(size = 16.dp))
-            AppButton(textId = R.string.button_text_wrong, onClick = onNextButtonClick)
+
+            Row(
+                modifier = Modifier.align(Alignment.Center),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ExpressionResultElements(expression = expression)
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(alignment = Alignment.BottomCenter)
+                    .buttonPadding()
+            ) {
+                AppButton(textId = R.string.button_text_wrong, onClick = onWrongButtonClick)
+                Spacer(modifier = Modifier.size(size = 16.dp))
+                AppButton(textId = R.string.button_text_wrong, onClick = onNextButtonClick)
+            }
         }
     }
 }
