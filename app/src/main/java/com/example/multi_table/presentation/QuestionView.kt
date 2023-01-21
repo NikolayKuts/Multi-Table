@@ -15,9 +15,7 @@ fun QuestionView(
 ) {
     val timeState = state.time.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
 
         ExpressionElements(

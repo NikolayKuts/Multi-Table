@@ -11,7 +11,6 @@ val PresentationModule = module {
             timer = get(),
             getMultiplicationExpressionWithoutResult = get(),
             getMultiplicationExpressionWithResult = get(),
-            getMultiplicationExpressionAfterWrongOne = get()
         )
     }
 }

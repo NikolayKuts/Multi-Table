@@ -1,5 +1,6 @@
 package com.example.multi_table.presentation
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -18,4 +19,14 @@ inline fun <T> Flow<T>.collectWhenStarted(
             collect { element -> onEach(element) }
         }
     }
+}
+
+fun <T> log(
+    message: T,
+    pointerMessage: String = "",
+    tag: String = "app_log",
+    pointer: String =
+        if (pointerMessage.isEmpty()) "***********" else "****** $pointerMessage ******",
+) {
+    Log.i(tag, "$pointer $message")
 }

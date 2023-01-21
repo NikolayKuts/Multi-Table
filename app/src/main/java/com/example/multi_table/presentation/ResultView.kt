@@ -20,11 +20,8 @@ fun ResultView(
 ) {
     val timeState = state.time.collectAsState()
     state.expression?.let { expression ->
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
-
 
             Row(
                 modifier = Modifier.align(Alignment.Center),
@@ -41,7 +38,7 @@ fun ResultView(
             ) {
                 AppButton(textId = R.string.button_text_wrong, onClick = onWrongButtonClick)
                 Spacer(modifier = Modifier.size(size = 16.dp))
-                AppButton(textId = R.string.button_text_wrong, onClick = onNextButtonClick)
+                AppButton(textId = R.string.button_text_next, onClick = onNextButtonClick)
             }
         }
     }
