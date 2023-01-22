@@ -2,81 +2,86 @@ package com.example.multi_table.domain.common
 
 import com.example.multi_table.domain.common.MemorizationLevel.*
 import com.example.multi_table.domain.entities.MultiplicationExpression
+import com.example.multi_table.domain.entities.MultiplicationExpressionHolder
+import com.example.multi_table.domain.entities.RepetitionState
+import com.example.multi_table.domain.entities.RepetitionState.SUCCESS
 import java.util.*
 
-class MultiplicationExpressionManager {
+class MultiplicationExpressionManager(
+    private val noneQueue: Queue<MultiplicationExpressionHolder> = getInitializedQueue(),
+    private val soonQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private val hurryQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private val immediatelyQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private var counter: Int = INITIAL_COUNTER_VALUE,
+    currentExpression: MultiplicationExpression? = null
+) {
 
     companion object {
 
+        private const val INITIAL_COUNTER_VALUE = 0
         private val DIGIT_RANGE: IntRange = 2..9
+        private const val IMMEDIATELY_STEP = 2
+        private const val HURRY_STEP = 3
+        private const val SOON_STEP = 4
+
+        private fun getInitializedQueue(): LinkedList<MultiplicationExpressionHolder> {
+            return LinkedList<MultiplicationExpressionHolder>().apply {
+                (DIGIT_RANGE).onEach { multiplicand: Int ->
+                    (DIGIT_RANGE).onEach { multiplier: Int ->
+                        add(
+                            MultiplicationExpressionHolder(
+                                expression = MultiplicationExpression(
+                                    multiplicand = multiplicand,
+                                    multiplier = multiplier
+                                ),
+                                count = INITIAL_COUNTER_VALUE
+                            )
+                        )
+                    }
+                }
+                shuffle()
+            }
+        }
     }
 
-    private val noneQueue: Queue<MultiplicationExpression>
-    private val soonQueue: Queue<MultiplicationExpression> = LinkedList()
-    private val hurryQueue: Queue<MultiplicationExpression> = LinkedList()
-    private val immediatelyQueue: Queue<MultiplicationExpression> = LinkedList()
-
-    var currentExpression: MultiplicationExpression? = null
+    var currentExpression: MultiplicationExpression? = currentExpression
         private set
-
-    init {
-        noneQueue = getInitializedList()
-    }
 
     fun nextExpression(
         answerTime: Long,
+        repetitionState: RepetitionState,
     ): MultiplicationExpression {
-        val nextExpression = when {
-            immediatelyQueue.isNotEmpty() -> immediatelyQueue.remove()
-            hurryQueue.isNotEmpty() -> hurryQueue.remove()
-            soonQueue.isNotEmpty() -> soonQueue.remove()
-            else -> noneQueue.remove()
-        }
-
-        currentExpression?.let { orderExpression(expression = it, answerTime = answerTime) }
-        currentExpression = nextExpression
-
-        return nextExpression
-    }
-
-    fun nextExpressionAfterWrongOne(): MultiplicationExpression {
-        val nextExpression = when {
-            immediatelyQueue.isNotEmpty() -> immediatelyQueue.remove()
-            hurryQueue.isNotEmpty() -> hurryQueue.remove()
-            soonQueue.isNotEmpty() -> soonQueue.remove()
-            else -> noneQueue.remove()
-        }
-
         currentExpression?.let {
-            orderExpression(expression = it, answerTime = IMMEDIATELY.timeout)
+            orderExpressions(
+                holder = MultiplicationExpressionHolder(expression = it, count = counter),
+                answerTime = if (repetitionState == SUCCESS) answerTime else IMMEDIATELY.timeout
+            )
         }
-        currentExpression = nextExpression
 
-        return nextExpression
+        val nextExpressionHolder = getNextExpressionHolder()
+        currentExpression = nextExpressionHolder.expression
+        counter++
+
+        return nextExpressionHolder.expression
     }
 
-    private fun getInitializedList(): LinkedList<MultiplicationExpression> {
-        return LinkedList<MultiplicationExpression>().apply {
-            (DIGIT_RANGE).onEach { multiplicand: Int ->
-                (DIGIT_RANGE).onEach { multiplier: Int ->
-                    add(
-                        MultiplicationExpression(
-                            multiplicand = multiplicand,
-                            multiplier = multiplier
-                        )
-                    )
-                }
-            }
-            shuffle()
-        }
+    private fun getNextExpressionHolder(): MultiplicationExpressionHolder = when {
+        immediatelyQueue.shouldBeGiven(step = IMMEDIATELY_STEP) -> immediatelyQueue.remove()
+        hurryQueue.shouldBeGiven(step = HURRY_STEP) -> hurryQueue.remove()
+        soonQueue.shouldBeGiven(step = SOON_STEP) -> soonQueue.remove()
+        else -> noneQueue.remove()
     }
 
-    private fun orderExpression(expression: MultiplicationExpression, answerTime: Long) {
+    private fun Queue<MultiplicationExpressionHolder>.shouldBeGiven(step: Int): Boolean {
+        return isNotEmpty() && first().count < (counter - step)
+    }
+
+    private fun orderExpressions(holder: MultiplicationExpressionHolder, answerTime: Long) {
         when {
-            answerTime >= IMMEDIATELY.timeout -> immediatelyQueue.add(expression)
-            answerTime >= HURRY.timeout -> hurryQueue.add(expression)
-            answerTime >= SOON.timeout -> soonQueue.add(expression)
-            answerTime >= NONE.timeout -> noneQueue.add(expression)
+            answerTime >= IMMEDIATELY.timeout -> immediatelyQueue.add(holder)
+            answerTime >= HURRY.timeout -> hurryQueue.add(holder)
+            answerTime >= SOON.timeout -> soonQueue.add(holder)
+            else -> noneQueue.add(holder)
         }
     }
 }

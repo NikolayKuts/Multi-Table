@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.multi_table.domain.common.Timer
-import com.example.multi_table.domain.useCases.GetMultiplicationExpressionAfterWrongOneUseCase
+import com.example.multi_table.domain.entities.RepetitionState
 import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithResultUseCase
 import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithoutResultUseCase
 import com.example.multi_table.presentation.MainState.*
@@ -17,8 +17,6 @@ class MainViewModel(
     private val getMultiplicationExpressionWithoutResult
     : GetMultiplicationExpressionWithoutResultUseCase,
     private val getMultiplicationExpressionWithResult: GetMultiplicationExpressionWithResultUseCase,
-    private val getMultiplicationExpressionAfterWrongOne
-    : GetMultiplicationExpressionAfterWrongOneUseCase
 ) : ViewModel(), DefaultLifecycleObserver {
 
     private val _state = MutableStateFlow<MainState>(StartState)
@@ -39,7 +37,8 @@ class MainViewModel(
             is MainEvent.NextExpression -> {
                 _state.value = QuestionedState(
                     expression = getMultiplicationExpressionWithoutResult(
-                        answerTime = timer.time.value
+                        answerTime = timer.time.value,
+                        state = RepetitionState.SUCCESS
                     ),
                     time = timer.getParsedTimeAsStateFlow(scope = viewModelScope)
                 )
@@ -58,7 +57,10 @@ class MainViewModel(
 
             is MainEvent.WrongAnswer -> {
                 _state.value = QuestionedState(
-                    expression = getMultiplicationExpressionAfterWrongOne(),
+                    expression = getMultiplicationExpressionWithoutResult(
+                        answerTime = timer.time.value,
+                        state = RepetitionState.FAILURE
+                    ),
                     time = timer.getParsedTimeAsStateFlow(scope = viewModelScope)
                 )
 
