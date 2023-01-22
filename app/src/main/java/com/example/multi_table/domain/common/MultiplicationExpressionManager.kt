@@ -13,12 +13,16 @@ class MultiplicationExpressionManager(
     private val hurryQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
     private val immediatelyQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
     private var counter: Int = INITIAL_COUNTER_VALUE,
+    currentExpression: MultiplicationExpression? = null
 ) {
 
     companion object {
 
         private const val INITIAL_COUNTER_VALUE = 0
         private val DIGIT_RANGE: IntRange = 2..9
+        private const val IMMEDIATELY_STEP = 2
+        private const val HURRY_STEP = 3
+        private const val SOON_STEP = 4
 
         private fun getInitializedQueue(): LinkedList<MultiplicationExpressionHolder> {
             return LinkedList<MultiplicationExpressionHolder>().apply {
@@ -40,7 +44,7 @@ class MultiplicationExpressionManager(
         }
     }
 
-    var currentExpression: MultiplicationExpression? = null
+    var currentExpression: MultiplicationExpression? = currentExpression
         private set
 
     fun nextExpression(
@@ -62,9 +66,9 @@ class MultiplicationExpressionManager(
     }
 
     private fun getNextExpressionHolder(): MultiplicationExpressionHolder = when {
-        immediatelyQueue.shouldBeGiven(step = 2) -> immediatelyQueue.remove()
-        hurryQueue.shouldBeGiven(step = 3) -> hurryQueue.remove()
-        soonQueue.shouldBeGiven(step = 4) -> soonQueue.remove()
+        immediatelyQueue.shouldBeGiven(step = IMMEDIATELY_STEP) -> immediatelyQueue.remove()
+        hurryQueue.shouldBeGiven(step = HURRY_STEP) -> hurryQueue.remove()
+        soonQueue.shouldBeGiven(step = SOON_STEP) -> soonQueue.remove()
         else -> noneQueue.remove()
     }
 
