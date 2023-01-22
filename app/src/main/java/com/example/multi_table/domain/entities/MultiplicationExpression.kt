@@ -6,8 +6,4 @@ class MultiplicationExpression(
 ) {
 
     val product: Int get() = multiplicand * multiplier
-
-    override fun toString(): String {
-        return "<$multiplicand * $multiplier>"
-    }
 }

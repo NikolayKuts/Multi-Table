@@ -7,18 +7,38 @@ import com.example.multi_table.domain.entities.RepetitionState
 import com.example.multi_table.domain.entities.RepetitionState.SUCCESS
 import java.util.*
 
-class MultiplicationExpressionManager {
+class MultiplicationExpressionManager(
+    private val noneQueue: Queue<MultiplicationExpressionHolder> = getInitializedQueue(),
+    private val soonQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private val hurryQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private val immediatelyQueue: Queue<MultiplicationExpressionHolder> = LinkedList(),
+    private var counter: Int = INITIAL_COUNTER_VALUE,
+) {
 
     companion object {
 
+        private const val INITIAL_COUNTER_VALUE = 0
         private val DIGIT_RANGE: IntRange = 2..9
-    }
 
-    private val noneQueue: Queue<MultiplicationExpressionHolder> = getInitializedQueue()
-    private val soonQueue: Queue<MultiplicationExpressionHolder> = LinkedList()
-    private val hurryQueue: Queue<MultiplicationExpressionHolder> = LinkedList()
-    private val immediatelyQueue: Queue<MultiplicationExpressionHolder> = LinkedList()
-    private var counter: Int = 0
+        private fun getInitializedQueue(): LinkedList<MultiplicationExpressionHolder> {
+            return LinkedList<MultiplicationExpressionHolder>().apply {
+                (DIGIT_RANGE).onEach { multiplicand: Int ->
+                    (DIGIT_RANGE).onEach { multiplier: Int ->
+                        add(
+                            MultiplicationExpressionHolder(
+                                expression = MultiplicationExpression(
+                                    multiplicand = multiplicand,
+                                    multiplier = multiplier
+                                ),
+                                count = INITIAL_COUNTER_VALUE
+                            )
+                        )
+                    }
+                }
+                shuffle()
+            }
+        }
+    }
 
     var currentExpression: MultiplicationExpression? = null
         private set
@@ -39,25 +59,6 @@ class MultiplicationExpressionManager {
         counter++
 
         return nextExpressionHolder.expression
-    }
-
-    private fun getInitializedQueue(): LinkedList<MultiplicationExpressionHolder> {
-        return LinkedList<MultiplicationExpressionHolder>().apply {
-            (DIGIT_RANGE).onEach { multiplicand: Int ->
-                (DIGIT_RANGE).onEach { multiplier: Int ->
-                    add(
-                        MultiplicationExpressionHolder(
-                            expression = MultiplicationExpression(
-                                multiplicand = multiplicand,
-                                multiplier = multiplier
-                            ),
-                            count = counter
-                        )
-                    )
-                }
-            }
-            shuffle()
-        }
     }
 
     private fun getNextExpressionHolder(): MultiplicationExpressionHolder = when {
