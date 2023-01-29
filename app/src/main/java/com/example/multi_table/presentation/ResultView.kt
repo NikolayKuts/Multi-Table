@@ -36,9 +36,17 @@ fun ResultView(
                     .align(alignment = Alignment.BottomCenter)
                     .buttonPadding()
             ) {
-                AppButton(textId = R.string.button_text_wrong, onClick = onWrongButtonClick)
+                AppButton(
+                    textId = R.string.button_text_wrong,
+                    background = MainTheme.colors.wrongButton,
+                    onClick = onWrongButtonClick
+                )
                 Spacer(modifier = Modifier.size(size = 16.dp))
-                AppButton(textId = R.string.button_text_next, onClick = onNextButtonClick)
+                AppButton(
+                    textId = R.string.button_text_next,
+                    background = MainTheme.colors.nextButton,
+                    onClick = onNextButtonClick
+                )
             }
         }
     }
