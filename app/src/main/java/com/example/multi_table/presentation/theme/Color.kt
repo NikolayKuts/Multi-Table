@@ -17,7 +17,7 @@ data class MainColors(
 
 val LightMainPalettes = MainColors(
     materialColors = lightColors(
-        primary = Color(0xFF5AB1AE)
+        primary = Color(0xFF65A8C7)
     ),
     expressionElement = Color(0xFF65A8C7),
     multiplicationSing = Color(0xFFD3C446),
