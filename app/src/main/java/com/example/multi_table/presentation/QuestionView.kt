@@ -16,7 +16,11 @@ fun QuestionView(
     val timeState = state.time.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
+        TimeView(
+            seconds = timeState.value.seconds,
+            millis = timeState.value.millis,
+            dotsAnimationEnabled = true
+        )
 
         ExpressionElements(
             expression = state.expression,
@@ -28,7 +32,11 @@ fun QuestionView(
                 .align(alignment = Alignment.BottomCenter)
                 .buttonPadding(),
         ) {
-            AppButton(textId = R.string.button_text_result, onClick = onResultButtonClick)
+            AnimatableBottomButton(
+                textId = R.string.button_text_result,
+                enterDuration = 300,
+                onClick = onResultButtonClick
+            )
         }
     }
 }

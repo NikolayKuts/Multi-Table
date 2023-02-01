@@ -15,7 +15,10 @@ fun BeginningView(onStartButtonClick: () -> Unit) {
                 .align(Alignment.BottomCenter)
                 .buttonPadding()
         ) {
-            AppButton(textId = R.string.button_text_start, onClick = onStartButtonClick)
+            AnimatableBottomButton(
+                textId = R.string.button_text_start,
+                onClick = onStartButtonClick
+            )
         }
     }
 }
