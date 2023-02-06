@@ -12,6 +12,7 @@ An application for memorizing the multiplication table. Based on the time spent 
 * Unit tests
 * Single Activity pattern
 * _**Theme**_: dark and light
+* _**English**_, _**Hebrew**_ and _**Russian**_ language support
 
 ## Compatibility
 From API level 24 to 32

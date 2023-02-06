@@ -4,7 +4,7 @@
     <string name="button_text_result">Result</string>
     <string name="button_text_wrong">Wrong</string>
     <string name="button_text_next">Next</string>
-    <string name="text_colon">:</string>
-    <string name="text_multiplication_sign">x</string>
-    <string name="text_equal_sign">=</string>
+    <string name="text_colon" translatable="false">:</string>
+    <string name="text_multiplication_sign" translatable="false">x</string>
+    <string name="text_equal_sign" translatable="false">=</string>
 </resources>
