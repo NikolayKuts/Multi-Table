@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
@@ -25,7 +26,23 @@ fun ResultView(
     val timeState = state.time.collectAsState()
     state.expression?.let { expression ->
         Box(modifier = Modifier.fillMaxSize()) {
-            TimeView(seconds = timeState.value.seconds, millis = timeState.value.millis)
+            val visible = remember { MutableTransitionState(true) }
+
+            AnimatedVisibility(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopCenter)
+                    .padding(top = (LocalConfiguration.current.screenHeightDp / 16).dp),
+                visibleState = visible,
+                exit = slideOutVertically(
+                    animationSpec = tween(durationMillis = 100),
+                    targetOffsetY = { fullWidth -> -fullWidth},
+                ) + fadeOut(),
+            ) {
+                TimeView(
+                    seconds = timeState.value.seconds,
+                    millis = timeState.value.millis,
+                )
+            }
 
             Row(
                 modifier = Modifier.align(Alignment.Center),
@@ -40,7 +57,8 @@ fun ResultView(
                     .align(alignment = Alignment.BottomCenter)
                     .buttonPadding(),
                 onWrongButtonClick = onWrongButtonClick,
-                onNextButtonClick = onNextButtonClick
+                onNextButtonClick = onNextButtonClick,
+                onStartAnimation = { visible.targetState = false }
             )
         }
     }
@@ -68,6 +86,7 @@ private fun AnimatableButtons(
     modifier: Modifier,
     onWrongButtonClick: () -> Unit,
     onNextButtonClick: () -> Unit,
+    onStartAnimation: () -> Unit = {},
 ) {
     val visible = remember { MutableTransitionState(false) }
     val wrongButtonPressState = remember { mutableStateOf(false) }
@@ -91,7 +110,8 @@ private fun AnimatableButtons(
             textId = R.string.button_text_wrong,
             visibleState = visible,
             buttonPressState = wrongButtonPressState,
-            background = MainTheme.colors.wrongButton
+            background = MainTheme.colors.wrongButton,
+            onStartAnimation = onStartAnimation,
         )
 
         Spacer(modifier = Modifier.size(size = 16.dp))
@@ -102,6 +122,7 @@ private fun AnimatableButtons(
             buttonPressState = nextButtonPressState,
             background = MainTheme.colors.nextButton,
             reversed = true,
+            onStartAnimation = onStartAnimation,
         )
     }
 }
@@ -112,9 +133,10 @@ private fun AnimatableButton(
     visibleState: MutableTransitionState<Boolean>,
     buttonPressState: MutableState<Boolean>,
     background: Color,
-    enterDuration: Int = 200,
-    exitDuration: Int = 200,
-    reversed: Boolean = false
+    enterDuration: Int = 100,
+    exitDuration: Int = 100,
+    reversed: Boolean = false,
+    onStartAnimation: () -> Unit = {}
 ) {
     val sign = if (reversed) -1 else 1
 
@@ -133,6 +155,7 @@ private fun AnimatableButton(
             textId = textId,
             background = background,
             onClick = {
+                onStartAnimation()
                 visibleState.targetState = false
                 buttonPressState.value = true
             }

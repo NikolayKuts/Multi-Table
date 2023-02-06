@@ -5,7 +5,10 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -17,13 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
-
 
 @Composable
 fun AppButton(
@@ -44,12 +45,13 @@ fun AppButton(
 fun Modifier.buttonPadding(): Modifier = this.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
 
 @Composable
-fun BoxScope.TimeView(seconds: Int, millis: Int, dotsAnimationEnabled: Boolean = false) {
-    Row(
-        modifier = Modifier
-            .align(alignment = Alignment.TopCenter)
-            .padding(top = (LocalConfiguration.current.screenHeightDp / 16).dp)
-    ) {
+fun TimeView(
+    modifier: Modifier = Modifier,
+    seconds: Int,
+    millis: Int,
+    dotsAnimationEnabled: Boolean = false
+) {
+    Row(modifier = modifier) {
         Text(
             text = seconds.toString(),
             style = MainTheme.typographies.timerTextStyle
