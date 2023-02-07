@@ -1,72 +1,56 @@
 package com.example.multi_table.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
-
-private const val ANIMATION_DURATION = 100
+import com.example.multi_table.presentation.theme.onAnimationFinished
 
 @Composable
 fun QuestionView(
-    state: MainState.QuestionedState,
+    screenState: MainState.QuestionedState,
     onResultButtonClick: () -> Unit,
 ) {
-    val timeState = state.time.collectAsState()
+    val timeState = screenState.time.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val visible = remember { MutableTransitionState(false) }
+        val visibilityState = remember { MutableTransitionState(false) }
+        val timerVisibilityState = remember { MutableTransitionState(false) }
+        var nextButtonPressedState by remember { mutableStateOf(false) }
 
-        LaunchedEffect(key1 = null) { visible.targetState = true }
+        LaunchedEffect(key1 = null) {
+            timerVisibilityState.targetState = true
+            visibilityState.targetState = true
+        }
 
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(alignment = Alignment.TopCenter)
-                .padding(top = (LocalConfiguration.current.screenHeightDp / 16).dp),
-            visibleState = visible,
-            enter = slideInVertically(
-                animationSpec = tween(durationMillis = ANIMATION_DURATION),
-                initialOffsetY = { fullWidth -> -fullWidth },
-            ) + fadeIn(),
-            exit = ExitTransition.None
+        onAnimationFinished(
+            visibilityState = visibilityState,
+            buttonPressedState = nextButtonPressedState,
         ) {
-            TimeView(
-                seconds = timeState.value.seconds,
-                millis = timeState.value.millis,
-                dotsAnimationEnabled = true
+            onResultButtonClick()
+        }
+
+        AnimatableTimer(timerVisibilityState = timerVisibilityState, timeState = timeState)
+
+        AnimatableExpression(visibilityState = visibilityState) {
+            ExpressionElements(
+                expression = screenState.expression,
+                modifier = Modifier.align(alignment = Alignment.Center)
             )
         }
 
-        ExpressionElements(
-            expression = state.expression,
-            modifier = Modifier.align(alignment = Alignment.Center)
+        AnimatableBottomButton(
+            visible = visibilityState,
+            textId = R.string.button_text_result,
+            enterDuration = COMMON_ANIMATION_DURATION,
+            exitDuration = COMMON_ANIMATION_DURATION,
+            onClick = {
+                nextButtonPressedState = true
+                visibilityState.targetState = false
+            }
         )
-
-        Box(
-            modifier = Modifier
-                .align(alignment = Alignment.BottomCenter)
-                .buttonPadding(),
-        ) {
-            AnimatableBottomButton(
-                textId = R.string.button_text_result,
-                enterDuration = ANIMATION_DURATION,
-                exitDuration = ANIMATION_DURATION,
-                onClick = onResultButtonClick,
-            )
-        }
     }
 }

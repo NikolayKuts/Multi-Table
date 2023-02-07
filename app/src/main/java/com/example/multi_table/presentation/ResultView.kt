@@ -10,12 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
+import com.example.multi_table.presentation.theme.onAnimationFinished
 
 @Composable
 fun ResultView(
@@ -24,30 +24,37 @@ fun ResultView(
     onNextButtonClick: () -> Unit,
 ) {
     val timeState = state.time.collectAsState()
+
     state.expression?.let { expression ->
         Box(modifier = Modifier.fillMaxSize()) {
-            val visible = remember { MutableTransitionState(true) }
-
-            AnimatedVisibility(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
-                    .padding(top = (LocalConfiguration.current.screenHeightDp / 16).dp),
-                visibleState = visible,
-                exit = slideOutVertically(
-                    animationSpec = tween(durationMillis = 100),
-                    targetOffsetY = { fullWidth -> -fullWidth},
-                ) + fadeOut(),
-            ) {
-                TimeView(
-                    seconds = timeState.value.seconds,
-                    millis = timeState.value.millis,
-                )
+            val visibilityState = remember { MutableTransitionState(false) }
+            val timerVisibilityState = remember { MutableTransitionState(true) }
+            var wrongButtonPressedState by remember { mutableStateOf(false) }
+            var nextButtonPressedState by remember { mutableStateOf(false) }
+            val changeVisibilityStates: () -> Unit = {
+                visibilityState.targetState = false
+                timerVisibilityState.targetState = false
             }
 
-            Row(
-                modifier = Modifier.align(Alignment.Center),
-                verticalAlignment = Alignment.CenterVertically
+            LaunchedEffect(key1 = null) { visibilityState.targetState = true }
+
+            onAnimationFinished(
+                visibilityState = visibilityState,
+                buttonPressedState = wrongButtonPressedState || nextButtonPressedState
             ) {
+                when {
+                    wrongButtonPressedState -> onWrongButtonClick()
+                    nextButtonPressedState -> onNextButtonClick()
+                }
+            }
+
+            AnimatableTimer(
+                timerVisibilityState = timerVisibilityState,
+                timeState = timeState,
+                dotsAnimationEnabled = false
+            )
+
+            AnimatableExpression(visibilityState = visibilityState) {
                 ExpressionResultElements(expression = expression)
             }
 
@@ -56,9 +63,15 @@ fun ResultView(
                     .fillMaxWidth()
                     .align(alignment = Alignment.BottomCenter)
                     .buttonPadding(),
-                onWrongButtonClick = onWrongButtonClick,
-                onNextButtonClick = onNextButtonClick,
-                onStartAnimation = { visible.targetState = false }
+                visibilityState = visibilityState,
+                onWrongButtonClick = {
+                    wrongButtonPressedState = true
+                    changeVisibilityStates()
+                },
+                onNextButtonClick = {
+                    nextButtonPressedState = true
+                    changeVisibilityStates()
+                },
             )
         }
     }
@@ -66,63 +79,46 @@ fun ResultView(
 
 @Composable
 private fun ExpressionResultElements(expression: MultiplicationExpression) {
-    ExpressionElements(expression = expression)
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        ExpressionElements(expression = expression)
 
-    Text(
-        text = stringResource(R.string.text_equal_sign),
-        modifier = Modifier.padding(start = 8.dp),
-        style = MainTheme.typographies.expressionResultTextStyle
-    )
+        Text(
+            text = stringResource(R.string.text_equal_sign),
+            modifier = Modifier.padding(start = 8.dp),
+            style = MainTheme.typographies.expressionResultTextStyle
+        )
 
-    Text(
-        text = expression.product.toString(),
-        modifier = Modifier.padding(start = 8.dp),
-        style = MainTheme.typographies.expressionResultTextStyle
-    )
+        Text(
+            text = expression.product.toString(),
+            modifier = Modifier.padding(start = 8.dp),
+            style = MainTheme.typographies.expressionResultTextStyle
+        )
+    }
 }
 
 @Composable
 private fun AnimatableButtons(
+    visibilityState: MutableTransitionState<Boolean>,
     modifier: Modifier,
     onWrongButtonClick: () -> Unit,
     onNextButtonClick: () -> Unit,
-    onStartAnimation: () -> Unit = {},
 ) {
-    val visible = remember { MutableTransitionState(false) }
-    val wrongButtonPressState = remember { mutableStateOf(false) }
-    val nextButtonPressState = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = null) { visible.targetState = true }
-
-    if (
-        !visible.targetState &&
-        !visible.currentState &&
-        (wrongButtonPressState.value || nextButtonPressState.value)
-    ) {
-        when {
-            wrongButtonPressState.value -> onWrongButtonClick()
-            nextButtonPressState.value -> onNextButtonClick()
-        }
-    }
-
     Column(modifier = modifier) {
         AnimatableButton(
             textId = R.string.button_text_wrong,
-            visibleState = visible,
-            buttonPressState = wrongButtonPressState,
+            visibleState = visibilityState,
             background = MainTheme.colors.wrongButton,
-            onStartAnimation = onStartAnimation,
+            onClick = onWrongButtonClick
         )
 
         Spacer(modifier = Modifier.size(size = 16.dp))
 
         AnimatableButton(
             textId = R.string.button_text_next,
-            visibleState = visible,
-            buttonPressState = nextButtonPressState,
+            visibleState = visibilityState,
             background = MainTheme.colors.nextButton,
             reversed = true,
-            onStartAnimation = onStartAnimation,
+            onClick = onNextButtonClick
         )
     }
 }
@@ -131,12 +127,11 @@ private fun AnimatableButtons(
 private fun AnimatableButton(
     @StringRes textId: Int,
     visibleState: MutableTransitionState<Boolean>,
-    buttonPressState: MutableState<Boolean>,
     background: Color,
-    enterDuration: Int = 100,
-    exitDuration: Int = 100,
+    enterDuration: Int = COMMON_ANIMATION_DURATION,
+    exitDuration: Int = COMMON_ANIMATION_DURATION,
     reversed: Boolean = false,
-    onStartAnimation: () -> Unit = {}
+    onClick: () -> Unit,
 ) {
     val sign = if (reversed) -1 else 1
 
@@ -154,11 +149,7 @@ private fun AnimatableButton(
         AppButton(
             textId = textId,
             background = background,
-            onClick = {
-                onStartAnimation()
-                visibleState.targetState = false
-                buttonPressState.value = true
-            }
+            onClick = onClick
         )
     }
 }

@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             }
             is QuestionedState -> {
                 QuestionView(
-                    state = state,
+                    screenState = state,
                     onResultButtonClick = { viewModel.sendEvent(event = MainEvent.ExpressionResult) }
                 )
             }
