@@ -5,24 +5,20 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.multi_table.R
+import com.example.multi_table.domain.common.Timer
 import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
 
@@ -110,26 +106,39 @@ private fun ExpressionElement(text: String) {
 }
 
 @Composable
-fun AnimatableBottomButton(
+fun BoxScope.AnimatableExpression(
+    visibilityState: MutableTransitionState<Boolean>,
+    expressionContent: @Composable AnimatedVisibilityScope.() -> Unit
+) {
+    AnimatedVisibility(
+        modifier = Modifier.align(Alignment.Center),
+        visibleState = visibilityState,
+        enter = slideInHorizontally(
+            animationSpec = tween(durationMillis = COMMON_ANIMATION_DURATION),
+            initialOffsetX = { fullWidth -> -fullWidth * 2 },
+        )
+                + fadeIn(),
+        exit = slideOutHorizontally(
+            animationSpec = tween(durationMillis = COMMON_ANIMATION_DURATION),
+            targetOffsetX = { fullWidth -> fullWidth * 2 },
+        )
+                + fadeOut(),
+        content = expressionContent
+    )
+}
+
+@Composable
+fun BoxScope.AnimatableBottomButton(
+    visible: MutableTransitionState<Boolean>,
     @StringRes textId: Int,
+    onClick: () -> Unit,
     enterDuration: Int = 1000,
     exitDuration: Int = 200,
-    onClick: () -> Unit,
 ) {
-    val visible = remember { MutableTransitionState(false) }
-    val nextButtonPressState = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = null) { visible.targetState = true }
-
-    if (
-        !visible.targetState &&
-        !visible.currentState &&
-        nextButtonPressState.value
-    ) {
-        onClick()
-    }
-
     AnimatedVisibility(
+        modifier = Modifier
+            .align(alignment = Alignment.BottomCenter)
+            .buttonPadding(),
         visibleState = visible,
         enter = slideInVertically(
             animationSpec = tween(durationMillis = enterDuration),
@@ -142,10 +151,35 @@ fun AnimatableBottomButton(
     ) {
         AppButton(
             textId = textId,
-            onClick = {
-                visible.targetState = false
-                nextButtonPressState.value = true
-            }
+            onClick = onClick
+        )
+    }
+}
+
+@Composable
+fun BoxScope.AnimatableTimer(
+    timerVisibilityState: MutableTransitionState<Boolean>,
+    timeState: State<Timer.Time>,
+    dotsAnimationEnabled: Boolean = true
+) {
+    AnimatedVisibility(
+        modifier = Modifier
+            .align(alignment = Alignment.TopCenter)
+            .padding(top = (LocalConfiguration.current.screenHeightDp / 16).dp),
+        visibleState = timerVisibilityState,
+        enter = slideInVertically(
+            animationSpec = tween(durationMillis = COMMON_ANIMATION_DURATION),
+            initialOffsetY = { fullWidth -> -fullWidth },
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            animationSpec = tween(durationMillis = COMMON_ANIMATION_DURATION),
+            targetOffsetY = { fullWidth -> -fullWidth },
+        ) + fadeOut(),
+    ) {
+        TimeView(
+            seconds = timeState.value.seconds,
+            millis = timeState.value.millis,
+            dotsAnimationEnabled = dotsAnimationEnabled
         )
     }
 }
