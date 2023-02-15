@@ -1,10 +1,9 @@
-package com.example.multi_table.domain.common
+package com.example.domain.common
 
-import com.example.multi_table.domain.common.MemorizationLevel.*
-import com.example.multi_table.domain.entities.MultiplicationExpression
-import com.example.multi_table.domain.entities.MultiplicationExpressionHolder
-import com.example.multi_table.domain.entities.RepetitionState
-import com.example.multi_table.domain.entities.RepetitionState.SUCCESS
+import com.example.domain.common.MemorizationLevel.*
+import com.example.domain.entities.MultiplicationExpression
+import com.example.domain.entities.MultiplicationExpressionHolder
+import com.example.domain.entities.RepetitionState
 import java.util.*
 
 class MultiplicationExpressionManager(
@@ -54,7 +53,7 @@ class MultiplicationExpressionManager(
         currentExpression?.let {
             orderExpressions(
                 holder = MultiplicationExpressionHolder(expression = it, count = counter),
-                answerTime = if (repetitionState == SUCCESS) answerTime else IMMEDIATELY.timeout
+                answerTime = if (repetitionState == RepetitionState.SUCCESS) answerTime else IMMEDIATELY.timeout
             )
         }
 

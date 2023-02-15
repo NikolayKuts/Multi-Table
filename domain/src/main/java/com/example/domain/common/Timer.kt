@@ -1,4 +1,4 @@
-package com.example.multi_table.domain.common
+package com.example.domain.common
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

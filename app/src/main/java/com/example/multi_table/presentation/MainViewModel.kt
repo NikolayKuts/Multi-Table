@@ -4,19 +4,16 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.multi_table.domain.common.Timer
-import com.example.multi_table.domain.entities.RepetitionState
-import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithResultUseCase
-import com.example.multi_table.domain.useCases.GetMultiplicationExpressionWithoutResultUseCase
+import com.example.domain.entities.RepetitionState
 import com.example.multi_table.presentation.MainState.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel(
-    private val timer: Timer,
+    private val timer: com.example.domain.common.Timer,
     private val getMultiplicationExpressionWithoutResult
-    : GetMultiplicationExpressionWithoutResultUseCase,
-    private val getMultiplicationExpressionWithResult: GetMultiplicationExpressionWithResultUseCase,
+    : com.example.domain.useCases.GetMultiplicationExpressionWithoutResultUseCase,
+    private val getMultiplicationExpressionWithResult: com.example.domain.useCases.GetMultiplicationExpressionWithResultUseCase,
 ) : ViewModel(), DefaultLifecycleObserver {
 
     private val _state = MutableStateFlow<MainState>(StartState)

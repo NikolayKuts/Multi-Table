@@ -1,7 +1,6 @@
 package com.example.multi_table.presentation
 
-import com.example.multi_table.domain.entities.MultiplicationExpression
-import com.example.multi_table.domain.common.Timer
+import com.example.domain.entities.MultiplicationExpression
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class MainState {
@@ -10,11 +9,11 @@ sealed class MainState {
 
     class QuestionedState(
         val expression: MultiplicationExpression,
-        val time: StateFlow<Timer.Time>
+        val time: StateFlow<com.example.domain.common.Timer.Time>
     ) : MainState()
 
     class ResultState(
         val expression: MultiplicationExpression?,
-        val time: StateFlow<Timer.Time>
+        val time: StateFlow<com.example.domain.common.Timer.Time>
     ) : MainState()
 }

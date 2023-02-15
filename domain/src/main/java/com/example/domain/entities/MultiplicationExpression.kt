@@ -1,4 +1,4 @@
-package com.example.multi_table.domain.entities
+package com.example.domain.entities
 
 class MultiplicationExpression(
     val multiplicand: Int,
