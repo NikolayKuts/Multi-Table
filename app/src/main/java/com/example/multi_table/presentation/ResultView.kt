@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.domain.entities.MultiplicationExpression
 import com.example.multi_table.R
-import com.example.multi_table.domain.entities.MultiplicationExpression
 import com.example.multi_table.presentation.theme.MainTheme
 import com.example.multi_table.presentation.theme.onAnimationFinished
 

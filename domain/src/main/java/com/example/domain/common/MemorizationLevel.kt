@@ -1,4 +1,4 @@
-package com.example.multi_table.domain.common
+package com.example.domain.common
 
 enum class MemorizationLevel(val timeout: Long) {
     NONE(timeout = 1000L),
