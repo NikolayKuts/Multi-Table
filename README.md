@@ -5,12 +5,14 @@ An application for memorizing the multiplication table. Based on the time spent 
 
 ## Technology stack and features
 
-* The code is written with _**Kotlin**_
-* _**MVI**_ + _**Coroutine Flow**_ + _**Clean Architecture**_
+* The code is written in _**Kotlin**_
+* _**MVI**_ + _**Clean Architecture**_
+* _**Coroutine Flows**_
+* _**Multi-Module architecture**_
 * For Ui used _**Jetpack Compose**_
 * For dependency injection used _**Koin**_
 * Unit tests
-* Single Activity pattern
+* _**Single Activity**_ pattern
 * _**Theme**_: dark and light
 * _**English**_, _**Hebrew**_ and _**Russian**_ language support
 
