@@ -1,13 +1,13 @@
 package com.example.multi_table.di
 
-import com.example.multi_table.presentation.MainViewModel
+import com.example.presentation.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val PresentationModule = module {
 
     viewModel {
-        MainViewModel(
+        com.example.presentation.MainViewModel(
             timer = get(),
             getMultiplicationExpressionWithoutResult = get(),
             getMultiplicationExpressionWithResult = get(),
