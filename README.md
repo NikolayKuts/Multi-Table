@@ -19,8 +19,4 @@ From API level 24 to 32
 
 ## Screen samples
 
-![name](https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/Screenshot_2022-07-29-18-14-03-79_f746bdb66bd97022eb6d2305a7b7ec51.png)
-![name](https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/Screenshot_2022-07-29-18-14-23-14_f746bdb66bd97022eb6d2305a7b7ec51.png)
-
-![name](https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/Screenshot_2022-07-29-18-14-10-72_f746bdb66bd97022eb6d2305a7b7ec51.png)
-![name](https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/Screenshot_2022-07-29-18-14-32-91_f746bdb66bd97022eb6d2305a7b7ec51.png)
+![name](https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/animation_semple.gif)
