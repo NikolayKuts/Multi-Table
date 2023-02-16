@@ -5,9 +5,10 @@ An application for memorizing the multiplication table. Based on the time spent 
 
 ## Technology stack and features
 
-* The code is written with _**Kotlin**_
-* _**MVI**_ + _**Coroutine Flow**_ + _**Clean Architecture**_
-* _**Multi-Module**_ architecture
+* The code is written in _**Kotlin**_
+* _**MVI**_ + _**Clean Architecture**_
+* _**Coroutine Flows**_
+* _**Multi-Module architecture**_
 * For Ui used _**Jetpack Compose**_
 * For dependency injection used _**Koin**_
 * Animated UI
