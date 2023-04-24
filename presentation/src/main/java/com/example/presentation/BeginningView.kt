@@ -1,15 +1,12 @@
 package com.example.presentation
 
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import com.example.multi_table.presentation.theme.onAnimationFinished
 
 @Composable
-fun BeginningView(onStartButtonClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
+fun BoxScope.BeginningView(onStartButtonClick: () -> Unit) {
         val visibilityState = remember { MutableTransitionState(false) }
         var startButtonPressedState by remember { mutableStateOf(false) }
 
@@ -30,5 +27,4 @@ fun BeginningView(onStartButtonClick: () -> Unit) {
                 startButtonPressedState = true
             },
         )
-    }
 }
