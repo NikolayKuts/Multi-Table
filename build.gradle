@@ -1,4 +1,5 @@
 buildscript {
+
     ext {
         coroutines_core_version = '1.6.4'
         android_core_version = '1.9.0'
@@ -12,6 +13,17 @@ buildscript {
         espresso_version = '3.4.0'
         lifecycle_runtime_verision = '2.5.1'
         appcompat_version = '1.6.1'
+        bom_firebase_version = "31.5.0"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
     }
 }
 

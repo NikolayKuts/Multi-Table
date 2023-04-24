@@ -17,7 +17,7 @@ import com.example.multi_table.presentation.theme.onAnimationFinished
 import com.example.presentation.theme.MainTheme
 
 @Composable
-fun ResultView(
+fun BoxScope.ResultView(
     state: MainState.ResultState,
     onWrongButtonClick: () -> Unit,
     onNextButtonClick: () -> Unit,
@@ -25,54 +25,52 @@ fun ResultView(
     val timeState = state.time.collectAsState()
 
     state.expression?.let { expression ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            val visibilityState = remember { MutableTransitionState(false) }
-            val timerVisibilityState = remember { MutableTransitionState(true) }
-            var wrongButtonPressedState by remember { mutableStateOf(false) }
-            var nextButtonPressedState by remember { mutableStateOf(false) }
-            val changeVisibilityStates: () -> Unit = {
-                visibilityState.targetState = false
-                timerVisibilityState.targetState = false
-            }
-
-            LaunchedEffect(key1 = null) { visibilityState.targetState = true }
-
-            onAnimationFinished(
-                visibilityState = visibilityState,
-                buttonPressedState = wrongButtonPressedState || nextButtonPressedState
-            ) {
-                when {
-                    wrongButtonPressedState -> onWrongButtonClick()
-                    nextButtonPressedState -> onNextButtonClick()
-                }
-            }
-
-            AnimatableTimer(
-                timerVisibilityState = timerVisibilityState,
-                timeState = timeState,
-                dotsAnimationEnabled = false
-            )
-
-            AnimatableExpression(visibilityState = visibilityState) {
-                ExpressionResultElements(expression = expression)
-            }
-
-            AnimatableButtons(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.BottomCenter)
-                    .buttonPadding(),
-                visibilityState = visibilityState,
-                onWrongButtonClick = {
-                    wrongButtonPressedState = true
-                    changeVisibilityStates()
-                },
-                onNextButtonClick = {
-                    nextButtonPressedState = true
-                    changeVisibilityStates()
-                },
-            )
+        val visibilityState = remember { MutableTransitionState(false) }
+        val timerVisibilityState = remember { MutableTransitionState(true) }
+        var wrongButtonPressedState by remember { mutableStateOf(false) }
+        var nextButtonPressedState by remember { mutableStateOf(false) }
+        val changeVisibilityStates: () -> Unit = {
+            visibilityState.targetState = false
+            timerVisibilityState.targetState = false
         }
+
+        LaunchedEffect(key1 = null) { visibilityState.targetState = true }
+
+        onAnimationFinished(
+            visibilityState = visibilityState,
+            buttonPressedState = wrongButtonPressedState || nextButtonPressedState
+        ) {
+            when {
+                wrongButtonPressedState -> onWrongButtonClick()
+                nextButtonPressedState -> onNextButtonClick()
+            }
+        }
+
+        AnimatableTimer(
+            timerVisibilityState = timerVisibilityState,
+            timeState = timeState,
+            dotsAnimationEnabled = false
+        )
+
+        AnimatableExpression(visibilityState = visibilityState, bottomPadding = 100.dp) {
+            ExpressionResultElements(expression = expression)
+        }
+
+        AnimatableButtons(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(alignment = Alignment.BottomCenter)
+                .buttonPadding(),
+            visibilityState = visibilityState,
+            onWrongButtonClick = {
+                wrongButtonPressedState = true
+                changeVisibilityStates()
+            },
+            onNextButtonClick = {
+                nextButtonPressedState = true
+                changeVisibilityStates()
+            },
+        )
     }
 }
 
