@@ -13,6 +13,7 @@ buildscript {
         espresso_version = '3.4.0'
         lifecycle_runtime_verision = '2.5.1'
         appcompat_version = '1.6.1'
+        bom_firebase_version = "31.5.0"
     }
 
     repositories {

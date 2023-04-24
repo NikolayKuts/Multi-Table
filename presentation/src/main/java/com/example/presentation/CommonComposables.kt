@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.domain.entities.MultiplicationExpression
 import com.example.presentation.theme.MainTheme
@@ -107,10 +108,13 @@ private fun ExpressionElement(text: String) {
 @Composable
 fun BoxScope.AnimatableExpression(
     visibilityState: MutableTransitionState<Boolean>,
-    expressionContent: @Composable AnimatedVisibilityScope.() -> Unit
+    bottomPadding: Dp,
+    expressionContent: @Composable AnimatedVisibilityScope.() -> Unit,
 ) {
     AnimatedVisibility(
-        modifier = Modifier.align(Alignment.Center),
+        modifier = Modifier
+            .padding(bottom = bottomPadding)
+            .align(Alignment.Center),
         visibleState = visibilityState,
         enter = slideInHorizontally(
             animationSpec = tween(durationMillis = COMMON_ANIMATION_DURATION),
