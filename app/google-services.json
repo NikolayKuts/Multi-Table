@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "230813354621",
+    "project_id": "multi-table-9d21a",
+    "storage_bucket": "multi-table-9d21a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230813354621:android:90f0e76ef123808372bf14",
+        "android_client_info": {
+          "package_name": "com.example.multi_table"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230813354621-j17nlt6fhvhje5113fqhereudrejmoo9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE6Yw8zxwK1Cz7VECGut1k_l_79VaMclg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230813354621-j17nlt6fhvhje5113fqhereudrejmoo9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
