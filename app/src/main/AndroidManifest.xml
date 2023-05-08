@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.multi_table">
+    package="com.kuts.multi_table">
 
     <application
         android:name=".di.MainApplication"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MultiTable">
         <activity
-            android:name="com.example.presentation.MainActivity"
+            android:name="com.kuts.presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MultiTable">

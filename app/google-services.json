@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:230813354621:android:90f0e76ef123808372bf14",
+        "mobilesdk_app_id": "1:230813354621:android:c0d9a28e207460ac72bf14",
         "android_client_info": {
-          "package_name": "com.example.multi_table"
+          "package_name": "com.kuts.multi_table"
         }
       },
       "oauth_client": [
