@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/NikolayKuts/Multi-Table/blob/main/pictures/app_Icon.png?raw=true" alt="Sublime's custom image" width="150" style="border-radius: 50%">
+  <img src="https://github.com/NikolayKuts/Multi-Table/blob/main/pictures/app_icon_rounded.png?raw=true" alt="Sublime's custom image" width="150" style="border-radius: 50%">
 </p>
 
 # Multi-Table
