@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/NikolayKuts/Multi-Table/blob/main/pictures/app_icon_rounded.png?raw=true" alt="Sublime's custom image" width="150" style="border-radius: 50%">
+  <img src="https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/app_icon_rounded.png?raw=true" alt="Sublime's custom image" width="150" style="border-radius: 50%">
 </p>
 
 # Multi-Table
@@ -20,6 +20,8 @@ An application for memorizing the multiplication table. Based on the time spent 
 * Crashlytics - [_**Firebase Crashlytics SDK**_](https://firebase.google.com/docs/crashlytics)
 * _**Theme**_: dark and light
 * _**English**_, _**Hebrew**_ and _**Russian**_ language support
+* Support for both _**portrait**_ and _**landscape**_ screen orientations
+* Support for _**split**_ mode.
 
 ## Compatibility
 From API level 24 to 33
