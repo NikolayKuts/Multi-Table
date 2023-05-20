@@ -7,6 +7,17 @@
 ## Discription
 An application for memorizing the multiplication table. Based on the time spent on the answer, the application itself calculates when it is necessary to show the corresponding expression for effective memorization.
 
+Install
+---------
+<div style="display:flex;">
+
+<a href="https://play.google.com/store/apps/details?id=com.kuts.multi_table">
+    <img alt="Get it on Google Play" height="80"
+        src="https://github.com/NikolayKuts/Multi-Table/blob/development/pictures/google-badge.png" />
+</a>
+ 
+</div>
+
 ## Technology stack and features
 
 * The code is written in [_**Kotlin**_](https://kotlinlang.org/)
